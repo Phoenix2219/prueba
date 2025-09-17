@@ -1,37 +1,33 @@
 import { Form, Input, Button, message, Select } from "antd"
 import { useSignupMutation } from "../../redux/slices/authSlice"
 import { useNavigate } from "react-router-dom"
-import { useDispatch } from "react-redux"
-import { setUser } from "../../redux/slices/userSlice"
 
 const Register = () => {
   const [form] = Form.useForm()
   const [signup, { isLoading }] = useSignupMutation()
   const navigate = useNavigate()
-  const dispatch = useDispatch()
 
   const onFinish = async (values: {
-    username: string
-    email: string
-    password: string
-    role: string[]
-  }) => {
-    try {
-      const user = await signup(values).unwrap()
-      message.success("Signup successful!")
-      dispatch(setUser(user))
-      form.resetFields()
-      navigate("/login")
-    } catch (error) {
-      message.error("Signup failed. Please try again.")
-    }
+  username: string
+  email: string
+  password: string
+  role: string[]
+}) => {
+  try {
+    await signup(values).unwrap()
+    message.success("Usuario registrado exitosamente!")
+    form.resetFields()
+    navigate("/users")
+  } catch (error) {
+    message.error("Error al registrar usuario. Intente nuevamente.")
   }
+}
 
   return (
     <div className="flex justify-center items-center h-[100vh] bg-primary">
       <div>
         <h1 className="text-2xl text-center pb-10">
-          Welcome to MERN-Dashboard
+          AcadWrite - Registrar nuevo usuario
         </h1>
         <Form
           className="border p-10 sm:w-[300px] md:w-[400px] bg-white"
@@ -42,39 +38,38 @@ const Register = () => {
           form={form}
         >
           <Form.Item
-            label="Username"
+            label="Nombre de usuario"
             name="username"
-            rules={[{ required: true, message: "Please input your username!" }]}
+            rules={[{ required: true, message: "Ingrese su usuario!" }]}
           >
-            <Input placeholder="Enter username.." className="w-full" />
+            <Input placeholder="Ingrese su usuario.." className="w-full" />
           </Form.Item>
 
           <Form.Item
-            label="Email"
+            label="Correo electrónico"
             name="email"
-            rules={[{ required: true, message: "Please input your email!" }]}
+            rules={[{ required: true, message: "Ingrese su correo!" }]}
           >
-            <Input placeholder="Enter email.." className="w-full" />
+            <Input placeholder="Ingrese su correo.." className="w-full" />
           </Form.Item>
 
           <Form.Item
-            label="Password"
+            label="Contraseña"
             name="password"
-            rules={[{ required: true, message: "Please input your password!" }]}
+            rules={[{ required: true, message: "Ingrese su contraseña!" }]}
           >
-            <Input.Password placeholder="Enter password.." className="w-full" />
+            <Input.Password placeholder="Ingrese su contraseña.." className="w-full" />
           </Form.Item>
 
           <Form.Item
-            label="Role"
+            label="Rol"
             name="role"
-            rules={[{ required: true, message: "Please select a role!" }]}
+            rules={[{ required: true, message: "Seleccione su rol!" }]}
           >
-            <Select placeholder="Select role">
-              <Select.Option value="user">User</Select.Option>
-              <Select.Option value="developer">Developer</Select.Option>
-              <Select.Option value="admin">Admin</Select.Option>
-              <Select.Option value="superadmin">Superadmin</Select.Option>
+            <Select placeholder="Seleccione un rol">
+              <Select.Option value="estudiante">Estudiante</Select.Option>
+              <Select.Option value="docente">Docente</Select.Option>
+              <Select.Option value="administrador">Administrador</Select.Option>
             </Select>
           </Form.Item>
 
@@ -85,7 +80,7 @@ const Register = () => {
               htmlType="submit"
               loading={isLoading}
             >
-              Register
+              Registrar
             </Button>
           </Form.Item>
         </Form>

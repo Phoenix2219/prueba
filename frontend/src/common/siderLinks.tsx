@@ -24,22 +24,21 @@ export const getNavItems = (user: UserProps) => {
     { label: "Discounts", key: "/discounts", icon: <SmileOutlined /> },
     { label: "Orders", key: `/orders`, icon: <OrderedListOutlined /> },
     { label: "Users", key: `/users`, icon: <UsergroupAddOutlined /> },
-    { label: "Profile", key: `/profile/${_id}`, icon: <UserOutlined /> },
+    { label: "Perfil", key: `/profile/${_id}`, icon: <UserOutlined /> },
   ] 
 
   const DOCENTE_ITEMS = [
     { label: "Inicio", key: "/home", icon: <HomeOutlined /> },
-    { label: "Dashboard", key: "/dashboard", icon: <LaptopOutlined /> },
+    { label: "Panel", key: "/dashboard", icon: <LaptopOutlined /> },
     { label: "Discounts", key: "/discounts", icon: <SmileOutlined /> },
     { label: "Orders", key: `/orders`, icon: <OrderedListOutlined /> },
-    { label: "Users", key: `/users`, icon: <UsergroupAddOutlined /> },
-    { label: "Profile", key: `/profile/${_id}`, icon: <UserOutlined /> },
+    { label: "Perfil", key: `/profile/${_id}`, icon: <UserOutlined /> },
   ] 
 
   const ESTUDIANTE_ITEMS = [
     { label: "Inicio", key: "/home", icon: <HomeOutlined /> },
     { label: "Archivos", key: "/file", icon: <FilePdfOutlined /> },
-    { label: "Profile", key: `/profile/${_id}`, icon: <UserOutlined /> },
+    { label: "Perfil", key: `/profile/${_id}`, icon: <UserOutlined /> },
   ]
 
   switch (role) {

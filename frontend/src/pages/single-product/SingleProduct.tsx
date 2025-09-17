@@ -123,7 +123,7 @@ const SingleProduct = () => {
     try {
       await deleteProduct(id!).unwrap()
       message.success("Product deleted")
-      navigate("/")
+      navigate("/home")
     } catch (error) {
       message.error("Error while deleting the product")
       console.log(error)

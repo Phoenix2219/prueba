@@ -1,12 +1,12 @@
 import "./App.css"
-import { Route, Routes } from "react-router-dom"
+import { Route, Routes, Navigate } from "react-router-dom"
 import Register from "./pages/register"
 import Login from "./pages/login"
 import MainLayout from "./components/layouts/MainLayout"
 import Profile from "./pages/profile"
 import PrivateRoute from "./utils/PrivateRoute"
-import Home from "./pages/home"
-import { DashboardPage } from "./pages/dashboard"
+import Homes from "./pages/homes"
+import DashboardPage from "./pages/dashboard"
 import NotFoundComponent from "./components/ui/NotFound"
 import SingleProduct from "./pages/single-product/SingleProduct"
 import Users from "./pages/users"
@@ -17,12 +17,13 @@ import Files from "./pages/files"
 function App() {
   return (
     <Routes>     
-      <Route path="/login" element={<Login />} />
+      <Route path="/login" element={<Login />} />      
       <Route path="*" element={<NotFoundComponent pageTitle={"Page"} />} />
       <Route element={<PrivateRoute />}>
       <Route path="/register" element={<Register />} />
         <Route element={<MainLayout />}>
-          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Navigate to="/home" />} />
+          <Route path="/home" element={<Homes />} />
           <Route path="/file" element={<Files />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/orders" element={<Orders />} />

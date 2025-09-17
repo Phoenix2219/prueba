@@ -10,7 +10,8 @@ import {
   Select,
   Popconfirm,
 } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 import {
   useGetAllUsersQuery,
   useDeleteUserMutation,
@@ -150,10 +151,10 @@ const Users = () => {
             role === "estudiante"
               ? "green"
               : role === "docente"
-              ? "blue"
-              : role === "administrador"
-              ? "orange"
-              : "cyan"
+                ? "blue"
+                : role === "administrador"
+                  ? "orange"
+                  : "cyan"
           }
         >
           {role.toUpperCase()}
@@ -203,6 +204,13 @@ const Users = () => {
 
   return (
     <div className="sm:p-2 md:p-6">
+      <div className="mb-4 flex justify-end">
+        <Link to="/register">
+          <Button type="primary" icon={<PlusOutlined />}>
+            Agregar usuario
+          </Button>
+        </Link>
+      </div>
       <Table
         loading={isLoading}
         pagination={pagination}

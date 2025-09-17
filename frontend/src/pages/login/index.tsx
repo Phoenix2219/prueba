@@ -17,7 +17,7 @@ const Login = () => {
       dispatch(setUser({ user: user, accessToken: user.token }));
       message.success("Login exitoso");
       form.resetFields();
-      navigate("/");
+      navigate("/home");
     } catch (error) {
       message.error("Credenciales inválidas");
     }

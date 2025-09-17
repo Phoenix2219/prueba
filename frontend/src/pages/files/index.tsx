@@ -30,7 +30,7 @@ const DocumentViewer: React.FC = () => {
   }, []);
 
   return (
-    <div className="p-6 max-w-7xl mx-auto bg-white shadow-lg rounded-2xl border border-gray-200 h-screen">
+    <div className="p-6 mx-full bg-white shadow-lg rounded-2xl border border-gray-200 h-screen">
       <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
         Mis Archivos
       </h1>
