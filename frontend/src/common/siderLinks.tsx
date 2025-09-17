@@ -28,8 +28,7 @@ export const getNavItems = (user: UserProps) => {
   ] 
 
   const DOCENTE_ITEMS = [
-    { label: "Inicio", key: "/home", icon: <HomeOutlined /> },
-    { label: "Panel", key: "/dashboard", icon: <LaptopOutlined /> },
+    { label: "Inicio", key: "/home", icon: <HomeOutlined /> },    
     { label: "Discounts", key: "/discounts", icon: <SmileOutlined /> },
     { label: "Orders", key: `/orders`, icon: <OrderedListOutlined /> },
     { label: "Perfil", key: `/profile/${_id}`, icon: <UserOutlined /> },

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import CountUp from "react-countup";
 import { Card, CardContent } from "../../components/ui/Card";
+import axios from "axios";
 import {
   LineChart,
   Line,
@@ -16,27 +17,58 @@ import {
   Legend,
 } from "recharts";
 
-const lineData = [
-  { day: "Lun", documentos: 10 },
-  { day: "Mar", documentos: 20 },
-  { day: "Mie", documentos: 15 },
-  { day: "Jue", documentos: 30 },
-  { day: "Vie", documentos: 25 },
-];
+// Interfaces de tipado
+interface UsuariosResponse {
+  administrador: number;
+  docente: number;
+  estudiante: number;
+}
 
-const barData = [
-  { usuario: "Juan", docs: 30 },
-  { usuario: "María", docs: 25 },
-  { usuario: "Pedro", docs: 20 },
-  { usuario: "Lucía", docs: 18 },
-  { usuario: "Ana", docs: 15 },
-];
+interface DocumentoDia {
+  _id: string;
+  total: number;
+}
+
+interface TopUsuario {
+  username: string;
+  docs: number;
+}
 
 const DashboardPage: React.FC = () => {
+  const [usuarios, setUsuarios] = useState<UsuariosResponse>({
+    administrador: 0,
+    docente: 0,
+    estudiante: 0,
+  });
+  const [documentosDia, setDocumentosDia] = useState<DocumentoDia[]>([]);
+  const [topUsuarios, setTopUsuarios] = useState<TopUsuario[]>([]);
   const [startCount, setStartCount] = useState(false);
 
   useEffect(() => {
-    setStartCount(true);
+    const fetchDashboard = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/user/stats");
+        //console.log("Usuarios desde API:", res.data);
+        setUsuarios(res.data); // { administrador, docente, estudiante }
+        setStartCount(true);
+      } catch (error) {
+        console.error("Error obteniendo datos del dashboard", error);
+      }
+    };
+
+    const fetchDocs = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/document/stats");
+        //console.log("Documentos desde API:", res.data);
+        setDocumentosDia(res.data.documentosPorDia);
+        setTopUsuarios(res.data.topUsuarios);
+      } catch (error) {
+        console.error("Error obteniendo datos de documentos", error);
+      }
+    };
+
+    fetchDashboard();
+    fetchDocs();
   }, []);
 
   return (
@@ -47,7 +79,7 @@ const DashboardPage: React.FC = () => {
           <CardContent className="text-center">
             <h2 className="text-xl font-semibold text-green-600">Total de estudiantes</h2>
             <p className="text-4xl font-bold text-green-600">
-              {startCount && <CountUp end={120} duration={2} />}
+              {startCount && <CountUp end={usuarios.estudiante} duration={2} />}
             </p>
           </CardContent>
         </Card>
@@ -59,7 +91,7 @@ const DashboardPage: React.FC = () => {
           <CardContent className="text-center">
             <h2 className="text-xl font-semibold text-blue-600">Total de docentes</h2>
             <p className="text-4xl font-bold text-blue-600">
-              {startCount && <CountUp end={45} duration={2} />}
+              {startCount && <CountUp end={usuarios.docente} duration={2} />}
             </p>
           </CardContent>
         </Card>
@@ -71,7 +103,7 @@ const DashboardPage: React.FC = () => {
           <CardContent className="text-center">
             <h2 className="text-xl font-semibold text-orange-600">Total de administradores</h2>
             <p className="text-4xl font-bold text-orange-600">
-              {startCount && <CountUp end={5} duration={2} />}
+              {startCount && <CountUp end={usuarios.administrador} duration={2} />}
             </p>
           </CardContent>
         </Card>
@@ -88,7 +120,7 @@ const DashboardPage: React.FC = () => {
           <CardContent className="text-center">
             <h2 className="text-xl font-semibold mb-5">Documentos subidos por día</h2>
             <ResponsiveContainer width="95%" height={350}>
-              <LineChart data={lineData}>
+              <LineChart data={documentosDia.map(d => ({ day: d._id, documentos: d.total }))}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="day" />
                 <YAxis />
@@ -119,9 +151,9 @@ const DashboardPage: React.FC = () => {
           <CardContent className="text-center">
             <h2 className="text-xl font-semibold mb-5">Top 5 usuarios con más documentos</h2>
             <ResponsiveContainer width="95%" height={350}>
-              <BarChart data={barData}>
+              <BarChart data={topUsuarios}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="usuario" />
+                <XAxis dataKey="username" />
                 <YAxis />
                 <Tooltip />
                 <Legend />

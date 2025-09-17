@@ -1,4 +1,5 @@
 import Document from "../models/document.model.js";
+import User from "../models/user.model.js";
 import { supabase } from "../../supabaseClient.js";
 import { v4 as uuidv4 } from "uuid";
 
@@ -58,5 +59,60 @@ export const getUserDocuments = async (req, res) => {
     res.json(docs);
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+//Extracion para estadisticas del dashboard
+export const getDashboardDocStats = async (req, res) => {
+  try {
+    // 1. Documentos subidos por día (últimos 7 días)
+    const documentosPorDia = await Document.aggregate([
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$uploadedAt" } },
+          total: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: 1 } }, // Ordenar por fecha ascendente
+      { $limit: 7 },         // Opcional: limitar a los últimos 7 días
+    ]);
+
+    // 2. Top 5 usuarios con más documentos
+    const topUsuarios = await Document.aggregate([
+      {
+        $group: {
+          _id: "$userId",
+          docs: { $sum: 1 },
+        },
+      },
+      { $sort: { docs: -1 } }, // Ordenar por mayor cantidad
+      { $limit: 5 },           // Solo los 5 primeros
+      {
+        $lookup: {
+          from: "users",          // Nombre de la colección de usuarios
+          localField: "_id",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      { $unwind: "$user" },      // Convertir el array en objeto
+      {
+        $project: {
+          username: "$user.username",
+          docs: 1,
+        },
+      },
+    ]);
+
+    res.json({
+      documentosPorDia,
+      topUsuarios,
+    });
+  } catch (error) {
+    console.error("Error obteniendo estadísticas de documentos:", error);
+    res.status(500).json({
+      message: "Error obteniendo estadísticas de documentos",
+      error: error.message,
+    });
   }
 };

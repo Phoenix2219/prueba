@@ -38,7 +38,7 @@ export const editUser = async (req, res) => {
 
     if (!updatedUser) {
       return res.status(404).json({ message: 'User not found' });
-    }  
+    }
 
     res.status(200).json({ message: 'User updated successfully', user: updatedUser });
   } catch (error) {
@@ -69,7 +69,7 @@ export const getAllUsers = async (req, res, next) => {
   }
 }
 
-export const deleteUser = async (req,res, next) => {
+export const deleteUser = async (req, res, next) => {
   const userId = req.params.id
   try {
     const user = await User.findByIdAndDelete(userId)
@@ -82,8 +82,41 @@ export const deleteUser = async (req,res, next) => {
   }
 }
 
-export const test = (req, res) => {
-    res.json({
-      message: "Api route is working!",
-    })
+//Extracion para estadisticas del usuarios por rol
+export const getDashboardStats = async (req, res) => {
+  try {
+    // Contar por rol
+    const counts = await User.aggregate([
+      {
+        $group: {
+          _id: "$role",
+          total: { $sum: 1 },
+        },
+      },
+    ]);
+
+    // Convertir el resultado en un objeto más claro
+    const result = {
+      administrador: 0,
+      docente: 0,
+      estudiante: 0,
+    };
+
+    counts.forEach((c) => {
+      result[c._id] = c.total;
+    });
+
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error obteniendo conteo de usuarios por rol",
+      error: error.message,
+    });
   }
+};
+
+export const test = (req, res) => {
+  res.json({
+    message: "Api route is working!",
+  })
+}
