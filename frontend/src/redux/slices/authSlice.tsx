@@ -25,6 +25,13 @@ export const authSlice = createApi({
         body: newUser,
       }),
     }),
+    signupStudent: builder.mutation({
+      query: (newStudent) => ({
+        url: "/signup-student",
+        method: "POST",
+        body: { ...newStudent, role: "estudiante" }, // fuerza rol estudiante
+      }),
+    }),
     signin: builder.mutation({
       query: (credentials) => ({
         url: "/signin",
@@ -51,6 +58,7 @@ export const authSlice = createApi({
 
 export const {
   useSignupMutation,
+  useSignupStudentMutation,
   useSigninMutation,
   useSignoutMutation,
 } = authSlice

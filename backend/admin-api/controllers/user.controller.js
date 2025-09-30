@@ -1,6 +1,8 @@
 import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
+import validatePassword from "../../utils/validatePassword.js";
 
+/* SIN VALIDACION DE CONTRASEÑA
 export const register = async (req, res) => {
   const { username, email, password, role } = req.body;
 
@@ -10,6 +12,33 @@ export const register = async (req, res) => {
     await newUser.save();
 
     res.status(201).json({ message: 'User created' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};*/
+
+export const register = async (req, res) => {
+  const { username, email, password, role } = req.body;
+
+  try {
+    // 1. Validar contraseña
+    if (!validatePassword(password)) {
+      return res.status(400).json({
+        message:
+          "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un caracter especial."
+      });
+    }
+    // 2. Hashear la contraseña
+    const hashedPassword = await bcrypt.hash(password, 10);
+    // 3. Crear usuario
+    const newUser = new User({
+      username,
+      email,
+      password: hashedPassword,
+      role,
+    });
+    await newUser.save();
+    res.status(201).json({ message: "User created" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

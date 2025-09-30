@@ -2,6 +2,7 @@ import Document from "../models/document.model.js";
 import User from "../models/user.model.js";
 import { supabase } from "../../supabaseClient.js";
 import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
 
 const BUCKET_NAME = "Acceso";
 
@@ -14,8 +15,11 @@ export const uploadDocument = async (req, res) => {
       return res.status(400).json({ error: "No se envió archivo" });
     }
 
+    // Generar un ID único
+    const uniqueId = `R${uuidv4()}`;
+
     // Nombre único
-    const fileName = `${userId}/${Date.now()}-R${uuidv4()}`;
+    const fileName = `${userId}/${Date.now()}-${uniqueId}`;
 
     // Subir a Supabase
     const { data, error } = await supabase.storage
@@ -25,7 +29,7 @@ export const uploadDocument = async (req, res) => {
       });
 
     if (error) {
-      console.error("❌ Error Supabase:", error);
+      console.error("Error Supabase:", error);
       return res.status(500).json({ error: error.message });
     }
 
@@ -37,13 +41,19 @@ export const uploadDocument = async (req, res) => {
     // Guardar en Mongo
     const newDoc = new Document({
       userId,
-      fileName,
+      fileName: uniqueId,
       supabasePath: data.path,
       url: publicUrlData.publicUrl,
       uploadedAt: new Date(),
     });
 
     await newDoc.save();
+
+    // AVISAR A N8N (Deshabilitado por ahora)
+    /*await axios.post("https://slowly-fluid-jam-jill.trycloudflare.com/webhook-test/ce2958e7-9a9e-4159-8a8b-5528a2e5a766", {
+      userId,
+      url: publicUrlData.publicUrl,
+    });*/
 
     res.status(201).json(newDoc);
   } catch (err) {

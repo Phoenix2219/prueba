@@ -2,16 +2,58 @@ import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { errorHandler } from '../../utils/error.js';
+import validatePassword from "../../utils/validatePassword.js";
 
 export const signup = async (req, res, next) => {
   const { username, email, password, role } = req.body;
-  const hashedPassword = bcrypt.hashSync(password, 10);
-  const newUser = new User({ username, email, password: hashedPassword, role });
+
   try {
+    if (!validatePassword(password)) {
+      return res.status(400).json({
+        message:
+          "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un caracter especial."
+      });
+    }
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    const newUser = new User({ username, email, password: hashedPassword, role });
     await newUser.save();
-    res.status(201).json("New user created successfully");
+
+    res.status(201).json({ message: 'Nuevo usuario creado' });
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/*Registro exclusivo de estudiantes*/
+export const signupStudent = async (req, res) => {
+  const { username, email, password } = req.body;
+
+  try {
+    if (!validatePassword(password)) {
+      return res.status(400).json({
+        message:
+          "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un caracter especial."
+      });
+    }
+
+    // Verificar si ya existe el correo
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ message: "El correo ya está registrado." });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({
+      username,
+      email,
+      password: hashedPassword,
+      role: "estudiante" // 👈 forzado
+    });
+    await newUser.save();
+
+    res.status(201).json({ message: 'Estudiante creado' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 

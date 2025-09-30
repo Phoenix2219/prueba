@@ -77,9 +77,9 @@ const Login = () => {
           </Form.Item>
         </Form>
 
-        {/*<div className="text-center mt-4 text-sm text-white/80">
-          ¿No tienes cuenta? <a href="/register" className="underline hover:text-white">Regístrate</a>
-        </div>*/}
+        <div className="text-center mt-4 text-sm text-white/80">
+          ¿No tienes cuenta? <a href="/register-student" className="underline hover:text-white">Regístrate</a>
+        </div>
       </animated.div>
     </div>
   );

@@ -1,28 +1,29 @@
-import { Form, Input, Button, message, Select, Tooltip } from "antd"
-import { useSignupMutation } from "../../redux/slices/authSlice"
+import { Form, Input, Button, message, Tooltip } from "antd"
+import { useSignupStudentMutation } from "../../redux/slices/authSlice"
 import { useNavigate } from "react-router-dom"
 import { useState } from "react";
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 
-const Register = () => {
+const RegisterStudent = () => {
   const [form] = Form.useForm()
-  const [signup, { isLoading }] = useSignupMutation()
+  const [signupStudent, { isLoading }] = useSignupStudentMutation()
   const navigate = useNavigate()
-  const [password, setPassword] = useState("")
+  const password = Form.useWatch("password", form) || "";
   const [showTooltip, setShowTooltip] = useState(false)
 
   const onFinish = async (values: {
     username: string
     email: string
     password: string
-    role: string[]
   }) => {
     try {
-      await signup(values).unwrap()
+      console.log("Datos enviados:", values);
+      await signupStudent(values).unwrap()
       message.success("Usuario registrado exitosamente!")
       form.resetFields()
-      navigate("/users") //navigate("/users") Si ingresa desde el administrador
-    } catch (error) {
+      navigate("/login")
+    } catch (error: any) {
+      console.error("Error backend:", error)
       message.error("Error al registrar usuario. Intente nuevamente.")
     }
   }
@@ -38,27 +39,26 @@ const Register = () => {
   const renderPasswordChecklist = () => (
     <div className="text-sm">
       {passwordRequirements.map((req, i) => {
-        const valid = req.regex.test(password)
+        const valid = req.regex.test(password);
         return (
           <div
             key={i}
-            className={`flex items-center gap-1 ${
-              valid ? "text-green-600" : "text-red-600"
-            }`}
+            className={`flex items-center gap-1 ${valid ? "text-green-600" : "text-red-600"
+              }`}
           >
             {valid ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
             {req.label}
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
 
   return (
     <div className="flex justify-center items-center h-[100vh] bg-primary">
       <div>
         <h1 className="text-2xl text-center pb-10">
-          AcadWrite - Registrar nuevo usuario
+          AcadWrite - Registrarse
         </h1>
         <Form
           className="border p-10 sm:w-[300px] md:w-[400px] bg-white"
@@ -92,14 +92,14 @@ const Register = () => {
               {
                 validator: (_, value) => {
                   const regex =
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.,;:]).{8,}$/
-                  if (!value) return Promise.resolve()
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.,;:]).{8,}$/;
+                  if (!value) return Promise.resolve();
                   if (!regex.test(value)) {
                     return Promise.reject(
                       "La contraseña no cumple con los requisitos."
-                    )
+                    );
                   }
-                  return Promise.resolve()
+                  return Promise.resolve();
                 },
               },
             ]}
@@ -114,23 +114,14 @@ const Register = () => {
               <Input.Password
                 placeholder="Ingrese su contraseña.."
                 className="w-full"
-                onChange={(e) => setPassword(e.target.value)}
+                value={password} // 👈 se conecta al estado
+                onChange={(e) => {
+                  form.setFieldsValue({ password: e.target.value }); // 👈 sincroniza el form
+                }}
                 onFocus={() => setShowTooltip(true)}
                 onBlur={() => setShowTooltip(false)}
               />
             </Tooltip>
-          </Form.Item>
-
-          <Form.Item
-            label="Rol"
-            name="role"
-            rules={[{ required: true, message: "Seleccione su rol!" }]}
-          >
-            <Select placeholder="Seleccione un rol">
-              <Select.Option value="estudiante">Estudiante</Select.Option>
-              <Select.Option value="docente">Docente</Select.Option>
-              <Select.Option value="administrador">Administrador</Select.Option>
-            </Select>
           </Form.Item>
 
           <Form.Item>
@@ -149,4 +140,4 @@ const Register = () => {
   )
 }
 
-export default Register
+export default RegisterStudent

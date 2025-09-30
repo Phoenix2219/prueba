@@ -1,6 +1,7 @@
 import "./App.css"
 import { Route, Routes, Navigate } from "react-router-dom"
 import Register from "./pages/register"
+import RegisterStudent from "./pages/registerStudent"
 import Login from "./pages/login"
 import MainLayout from "./components/layouts/MainLayout"
 import Profile from "./pages/profile"
@@ -17,7 +18,8 @@ import Files from "./pages/files"
 function App() {
   return (
     <Routes>     
-      <Route path="/login" element={<Login />} />      
+      <Route path="/login" element={<Login />} />
+      <Route path="/register-student" element={<RegisterStudent />} />     
       <Route path="*" element={<NotFoundComponent pageTitle={"Page"} />} />
       <Route element={<PrivateRoute />}>
       <Route path="/register" element={<Register />} />
