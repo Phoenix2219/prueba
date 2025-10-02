@@ -25,7 +25,7 @@ const UploadPDF: React.FC = () => {
       formData.append("file", file); 
 
       //const res = 
-      await fetch("http://localhost:5000/api/document/upload", {
+      await fetch("/api/document/upload", {
         method: "POST",        
         body: formData,
         credentials: "include",

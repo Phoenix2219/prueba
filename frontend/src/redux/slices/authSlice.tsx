@@ -5,7 +5,7 @@ import { RootState } from "../store"
 export const authSlice = createApi({
   reducerPath: "authSlice",
   baseQuery: fetchBaseQuery({
-    baseUrl: `http://localhost:5000/api/auth`,
+    baseUrl: "/api/auth",
     credentials: "include",
     prepareHeaders: (headers, { getState }) => {
       const state = getState() as RootState

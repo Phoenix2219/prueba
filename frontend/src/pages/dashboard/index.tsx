@@ -47,7 +47,7 @@ const DashboardPage: React.FC = () => {
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/user/stats");
+        const res = await axios.get("/api/user/stats");
         //console.log("Usuarios desde API:", res.data);
         setUsuarios(res.data); // { administrador, docente, estudiante }
         setStartCount(true);
@@ -58,7 +58,7 @@ const DashboardPage: React.FC = () => {
 
     const fetchDocs = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/document/stats");
+        const res = await axios.get("/api/document/stats");
         //console.log("Documentos desde API:", res.data);
         setDocumentosDia(res.data.documentosPorDia);
         setTopUsuarios(res.data.topUsuarios);
