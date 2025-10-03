@@ -50,10 +50,10 @@ export const uploadDocument = async (req, res) => {
     await newDoc.save();
 
     // AVISAR A N8N (Deshabilitado por ahora)
-    /*await axios.post("https://slowly-fluid-jam-jill.trycloudflare.com/webhook-test/ce2958e7-9a9e-4159-8a8b-5528a2e5a766", {
+    await axios.post("https://5ad9150b04ef.ngrok-free.app", {
       userId,
       url: publicUrlData.publicUrl,
-    });*/
+    });
 
     res.status(201).json(newDoc);
   } catch (err) {
