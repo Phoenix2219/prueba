@@ -50,7 +50,7 @@ export const uploadDocument = async (req, res) => {
     await newDoc.save();
 
     // AVISAR A N8N (Deshabilitado por ahora)
-    await axios.post("https://dd751ddbcae5.ngrok-free.app", {
+    await axios.post("https://dd751ddbcae5.ngrok-free.app/webhook/ce2958e7-9a9e-4159-8a8b-5528a2e5a766", {
       userId,
       url: publicUrlData.publicUrl,
     });
