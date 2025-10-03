@@ -6,6 +6,7 @@ import userRouter from "./admin-api/routes/user.route.js"
 import authRouter from "./admin-api/routes/auth.route.js"
 import testRouter from "./admin-api/routes/test.route.js"
 import documentRouter from "./admin-api/routes/document.route.js";
+import { createAdminUser } from "./admin-api/seed/createAdminUser.js";
 import cookieParser from "cookie-parser"
 import path from "path"
 
@@ -14,8 +15,9 @@ dotenv.config()
 const app = express()
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("Connected to MongoDB!")
+  .then(async() => {
+    console.log("Connected to MongoDB!");
+    await createAdminUser();
   })
   .catch((err) => {
     console.log(err)
@@ -63,10 +65,10 @@ app.use((err, req, res, next) => {
   })
 })
 
-/*app.use(express.static(path.join(__dirname, "/client/dist")))
+/*app.use(express.static(path.join(__dirname, "/frontend/dist")))
 
 app.use("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "dist", "index.html"))
+  res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"))
 })*/
 
 

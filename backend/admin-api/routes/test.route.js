@@ -1,19 +1,21 @@
-
-import express from 'express';
-import { verifyToken } from '../../middlewares/authMiddleware.js';
+import express from "express";
+import { verifyToken } from "../../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.get('/admin', verifyToken(['admin', 'teacher']), (req, res) => {
-  res.status(200).json({ message: 'Hello Admin or Teacher' });
+// Acceso para admin o docente
+router.get("/admin", verifyToken(["administrador", "docente"]), (req, res) => {
+  res.status(200).json({ message: "Hello Admin or Teacher" });
 });
 
-router.get('/teacher', verifyToken(['teacher']), (req, res) => {
-  res.status(200).json({ message: 'Hello Teacher' });
+// Solo docentes
+router.get("/teacher", verifyToken(["docente"]), (req, res) => {
+  res.status(200).json({ message: "Hello Teacher" });
 });
 
-router.get('/student', verifyToken(['student']), (req, res) => {
-  res.status(200).json({ message: 'Hello Student' });
+// Solo estudiantes
+router.get("/student", verifyToken(["estudiante"]), (req, res) => {
+  res.status(200).json({ message: "Hello Student" });
 });
 
 export default router;

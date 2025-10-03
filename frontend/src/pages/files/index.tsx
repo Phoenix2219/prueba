@@ -14,13 +14,18 @@ const DocumentViewer: React.FC = () => {
   useEffect(() => {
     const fetchDocuments = async () => {
       try {
-        const res = await fetch("/api/document/lower", {
-          credentials: "include",
+        const token = localStorage.getItem("token"); // Obtener token guardado
+
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/document/lower`, {
+          headers: {
+            "Authorization": `Bearer ${token}`, // Enviar token en header
+          },
         });
+
         if (!res.ok) throw new Error("Error al obtener documentos");
         const data = await res.json();
         setDocuments(data);
-        if (data.length > 0) setSelectedDoc(data[0]); // Selecciona el primero por defecto
+        if (data.length > 0) setSelectedDoc(data[0]);
       } catch (error) {
         console.error(error);
       }
@@ -47,11 +52,10 @@ const DocumentViewer: React.FC = () => {
               {documents.map((doc) => (
                 <li
                   key={doc._id}
-                  className={`p-3 rounded-lg cursor-pointer border transition ${
-                    selectedDoc?._id === doc._id
+                  className={`p-3 rounded-lg cursor-pointer border transition ${selectedDoc?._id === doc._id
                       ? "border-blue-600 bg-blue-50 shadow"
                       : "border-gray-200 hover:bg-gray-100"
-                  }`}
+                    }`}
                   onClick={() => setSelectedDoc(doc)}
                 >
                   <p className="font-semibold">{doc.fileName}</p>
@@ -67,7 +71,7 @@ const DocumentViewer: React.FC = () => {
         {/* Columna derecha: previsualizador único */}
         <div className="border rounded-xl bg-gray-50 shadow-inner h-full flex flex-col mr-6">
           {selectedDoc ? (
-            <>              
+            <>
               <iframe
                 src={selectedDoc.url}
                 className="w-full h-full rounded-b-lg"

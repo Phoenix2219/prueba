@@ -20,23 +20,31 @@ const UploadPDF: React.FC = () => {
     if (!file) return;
 
     setUploading(true);
-    try {      
+    try {
       const formData = new FormData();
-      formData.append("file", file); 
+      formData.append("file", file);
 
-      //const res = 
-      await fetch("/api/document/upload", {
-        method: "POST",        
+      // 👉 Obtener el token guardado
+      const token = localStorage.getItem("token");
+
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/document/upload`, {
+        method: "POST",
         body: formData,
-        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
-      //const data = await res.json();
-      //console.log("Documento guardado:", data);
+      if (!res.ok) {
+        throw new Error("Error en la subida");
+      }
 
-      message.success("Archivo PDF subido con éxito");     
+      const data = await res.json();
+      console.log("Documento guardado:", data);
+
+      message.success("Archivo PDF subido con éxito");
     } catch (error) {
-      //console.error("Error al subir:", error);
+      console.error("Error al subir:", error);
       message.error("Error al subir archivo");
     } finally {
       setUploading(false);

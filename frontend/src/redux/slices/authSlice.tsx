@@ -5,7 +5,7 @@ import { RootState } from "../store"
 export const authSlice = createApi({
   reducerPath: "authSlice",
   baseQuery: fetchBaseQuery({
-    baseUrl: "/api/auth",
+    baseUrl: `${import.meta.env.VITE_API_URL}/api/auth`,
     credentials: "include",
     prepareHeaders: (headers, { getState }) => {
       const state = getState() as RootState
@@ -41,9 +41,10 @@ export const authSlice = createApi({
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled
-          dispatch(setUser({ user: data.user, accessToken: data.token })) // Ensure correct field names
+          dispatch(setUser({ user: data.user, accessToken: data.token }))
+          localStorage.setItem("token", data.token);
         } catch (error) {
-          // Handle error
+          console.error("Error al iniciar sesión:", error);
         }
       },
     }),

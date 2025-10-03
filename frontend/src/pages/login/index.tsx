@@ -31,18 +31,25 @@ const Login = () => {
   });
 
   return (
-    <div className="relative flex justify-center items-center h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 overflow-hidden">
-      {/* Círculos animados de fondo */}
-      <div className="absolute w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse -top-20 -left-20"></div>
-      <div className="absolute w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse bottom-0 right-0"></div>
+    <div className="relative flex justify-center items-center h-screen bg-gradient-to-br from-gray-900 via-black to-indigo-950 overflow-hidden">
+      {/* Luces futuristas de fondo */}
+      <div className="absolute w-[600px] h-[600px] bg-indigo-500/30 rounded-full blur-3xl animate-pulse -top-40 -left-40"></div>
+      <div className="absolute w-[500px] h-[500px] bg-pink-500/20 rounded-full blur-3xl animate-pulse bottom-0 right-0"></div>
 
-      <animated.div style={fadeIn} className="z-10 w-[90%] sm:w-[400px] bg-white/10 backdrop-blur-lg rounded-3xl shadow-2xl p-10 border border-white/20">
-        <div className="text-center mb-6">
-          <img src="/logo.png" alt="Logo" className="mx-auto w-20 h-20 rounded-full shadow-md border border-white/30" />
-          <h1 className="text-3xl font-bold text-white mt-4">Bienvenido</h1>
-          <p className="text-white/70">Accede con tus credenciales</p>
+      <animated.div
+        style={fadeIn}
+        className="z-10 w-[90%] sm:w-[420px] bg-white/10 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/20 p-10 text-center"
+      >
+        <div className="flex items-center justify-center gap-3 mb-6 mt-1">
+          <h1 className="text-3xl font-extrabold text-white tracking-wide">
+            AcadWrite <span className="text-indigo-400">IA</span>
+          </h1>
         </div>
 
+        <p className="text-2xl font-semibold text-indigo-300 mb-8 tracking-wide hover:text-indigo-100 transition-colors duration-300">
+          Iniciar Sesión
+        </p>
+        
         <Form
           layout="vertical"
           form={form}
@@ -52,7 +59,10 @@ const Login = () => {
           <Form.Item
             label={<span className="text-white">Correo</span>}
             name="email"
-            rules={[{ required: true, message: "Ingrese su correo!" }]}
+            rules={[
+              { required: true, message: "Ingrese su correo!" },
+              { type: "email", message: "Ingrese un correo válido!" }
+            ]}
           >
             <Input placeholder="correo@ejemplo.com" className="rounded-xl py-2" />
           </Form.Item>

@@ -65,7 +65,10 @@ export const uploadDocument = async (req, res) => {
 //Listar documentos del usuario autenticado
 export const getUserDocuments = async (req, res) => {
   try {
-    const docs = await Document.find({ userId: req.user.id });
+    if (!req.user) {
+      return res.status(401).json({ message: "No authenticated user found" });
+    }
+    const docs = await Document.find({ userId: req.user._id });
     res.json(docs);
   } catch (err) {
     res.status(500).json({ error: err.message });

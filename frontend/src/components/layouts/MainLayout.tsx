@@ -1,63 +1,80 @@
-import React, { useState, useEffect } from "react"
-import { UserOutlined } from "@ant-design/icons"
-import { Avatar, Layout, Menu, theme } from "antd"
-import { Link, Outlet, useNavigate } from "react-router-dom"
-import { useSelector, useDispatch } from "react-redux"
-import { Footer } from "antd/es/layout/layout"
-import { getNavItems } from "../../common/siderLinks"
-import { clearUser } from "../../redux/slices/userSlice"
+import React, { useState, useEffect } from "react";
+import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
+import { Avatar, Layout, Menu, Dropdown, message, theme } from "antd";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { Footer } from "antd/es/layout/layout";
+import { getNavItems } from "../../common/siderLinks";
+import { clearUser } from "../../redux/slices/userSlice";
 
-const { Header, Content, Sider } = Layout
+const { Header, Content, Sider } = Layout;
 
 interface UserState {
   currentUser: {
-    _id: string
-    username: string
-    email: string
-    role: string
-  } | null
-  token: string | null
-  isLoading: boolean
-  error: string | null
+    _id: string;
+    username: string;
+    email: string;
+    role: string;
+  } | null;
+  token: string | null;
+  isLoading: boolean;
+  error: string | null;
 }
 
 const MainLayout: React.FC = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const {
     token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken()
+  } = theme.useToken();
 
-  const [collapsed, setCollapsed] = useState(false)
-  const navigate = useNavigate()
+  const [collapsed, setCollapsed] = useState(false);
+  const navigate = useNavigate();
   const user = useSelector(
     (state: { user: UserState }) => state.user.currentUser
-  )
-  const NAV_ITEMS = getNavItems(user!)
+  );
+  const NAV_ITEMS = getNavItems(user!);
 
   // --------------------------
   // Logout y aviso al cerrar
   // --------------------------
   useEffect(() => {
-    // Mostrar aviso antes de cerrar
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      e.preventDefault()
-      e.returnValue = ""
-    }
+      e.preventDefault();
+      e.returnValue = "";
+    };
 
-    // Hacer logout al cerrar o recargar
     const handleUnload = () => {
-      dispatch(clearUser())
-      localStorage.removeItem("access_token") // También eliminas token
-    }
+      dispatch(clearUser());
+      localStorage.removeItem("access_token");
+    };
 
-    window.addEventListener("beforeunload", handleBeforeUnload)
-    window.addEventListener("unload", handleUnload)
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("unload", handleUnload);
 
     return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload)
-      window.removeEventListener("unload", handleUnload)
-    }
-  }, [dispatch])
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("unload", handleUnload);
+    };
+  }, [dispatch]);
+
+  const handleSignout = () => {
+    dispatch(clearUser());
+    localStorage.removeItem("access_token");
+    message.success("Sesión cerrada");
+    navigate("/login");
+  };
+
+  // Menú del Dropdown del usuario
+  const userMenu = (
+    <Menu>
+      <Menu.Item key="profile" onClick={() => navigate(`/profile/${user!._id}`)}>
+        Perfil
+      </Menu.Item>
+      <Menu.Item key="signout" danger icon={<LogoutOutlined />} onClick={handleSignout}>
+        Salir
+      </Menu.Item>
+    </Menu>
+  );
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -67,33 +84,33 @@ const MainLayout: React.FC = () => {
           theme="dark"
           mode="horizontal"
           style={{ flex: 1, minWidth: 0 }}
-          className=" flex justify-end "
+          className="flex justify-end"
         >
-          <div className="flex items-center">
-            <Avatar
-              size={30}
-              icon={<UserOutlined />}
-              className="mr-2 bg-gray-500"
-            />
-            <h1 className="sm:text-md md:text-lg">
-              Hola, {user!.username.charAt(0).toUpperCase() + user!.username.slice(1)}
-            </h1>
-          </div>
+          <Dropdown overlay={userMenu} placement="bottomRight" arrow>
+            <div className="flex items-center cursor-pointer hover:bg-white/10 p-1 rounded transition-all duration-200">
+              <Avatar size={30} icon={<UserOutlined />} className="mr-2 bg-gray-500" />
+              <span className="text-white sm:text-md md:text-lg">
+                Hola, {user!.username.charAt(0).toUpperCase() + user!.username.slice(1)}
+              </span>
+            </div>
+          </Dropdown>
         </Menu>
       </Header>
+
       <Layout>
         <Sider
-          onCollapse={() => setCollapsed(!collapsed)}
           collapsible
+          collapsed={collapsed}
+          onCollapse={() => setCollapsed(!collapsed)}
           width={200}
+          collapsedWidth={80} // Tamaño mínimo al colapsar
           style={{ background: colorBgContainer }}
           breakpoint="md"
-          collapsedWidth="0"
+          onMouseEnter={() => setCollapsed(false)} // Expande al hover
+          onMouseLeave={() => setCollapsed(true)}  // Colapsa al salir
         >
           <Link to="/home">
-            {collapsed ? (
-              <h1 className="text-xl flex justify-center py-10">P4</h1>
-            ) : (
+            {!collapsed ? (
               <div className="flex justify-center mb-6 mt-6">
                 <img
                   src="/logo.png"
@@ -102,16 +119,20 @@ const MainLayout: React.FC = () => {
                   className="rounded-full shadow-md"
                 />
               </div>
+            ) : (
+              <h1 className="text-xl flex justify-center py-10">AW</h1>
             )}
           </Link>
+
           <Menu
             mode="inline"
-            selectedKeys={[window.location.pathname]} // Puedes mejorar con useLocation()
+            selectedKeys={[window.location.pathname]}
             onClick={({ keyPath }) => navigate(`${keyPath}`)}
             style={{ height: "100%", borderRight: 0 }}
             items={NAV_ITEMS}
           />
         </Sider>
+
         <Layout>
           <Content
             style={{
@@ -126,6 +147,7 @@ const MainLayout: React.FC = () => {
           </Content>
         </Layout>
       </Layout>
+
       <Footer style={{ textAlign: "center" }}>
         AcadWrite ©{new Date().getFullYear()} | Creado por{" "}
         <a
@@ -138,7 +160,7 @@ const MainLayout: React.FC = () => {
         </a>
       </Footer>
     </Layout>
-  )
-}
+  );
+};
 
-export default MainLayout
+export default MainLayout;

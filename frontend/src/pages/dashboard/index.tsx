@@ -45,11 +45,17 @@ const DashboardPage: React.FC = () => {
   const [startCount, setStartCount] = useState(false);
 
   useEffect(() => {
+    const token = localStorage.getItem("token"); // o donde guardes el token
+
     const fetchDashboard = async () => {
       try {
-        const res = await axios.get("/api/user/stats");
-        //console.log("Usuarios desde API:", res.data);
-        setUsuarios(res.data); // { administrador, docente, estudiante }
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/user/stats`,
+          {
+            headers: { Authorization: `Bearer ${token}` }, // aquí va el token
+          }
+        );
+        setUsuarios(res.data);
         setStartCount(true);
       } catch (error) {
         console.error("Error obteniendo datos del dashboard", error);
@@ -58,8 +64,12 @@ const DashboardPage: React.FC = () => {
 
     const fetchDocs = async () => {
       try {
-        const res = await axios.get("/api/document/stats");
-        //console.log("Documentos desde API:", res.data);
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/document/stats`,
+          {
+            headers: { Authorization: `Bearer ${token}` }, // aquí va el token
+          }
+        );
         setDocumentosDia(res.data.documentosPorDia);
         setTopUsuarios(res.data.topUsuarios);
       } catch (error) {

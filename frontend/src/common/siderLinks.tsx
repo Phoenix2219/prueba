@@ -3,8 +3,6 @@ import {
   FilePdfOutlined,
   UserOutlined,
   UsergroupAddOutlined,
-  OrderedListOutlined,
-  SmileOutlined,
   HomeOutlined,
 } from "@ant-design/icons"
 
@@ -19,18 +17,13 @@ export const getNavItems = (user: UserProps) => {
   const { _id, role } = user
 
   const ADMIN_ITEMS = [
-    { label: "Inicio", key: "/home", icon: <HomeOutlined /> },
     { label: "Panel", key: "/dashboard", icon: <LaptopOutlined /> },
-    { label: "Discounts", key: "/discounts", icon: <SmileOutlined /> },
-    { label: "Orders", key: `/orders`, icon: <OrderedListOutlined /> },
     { label: "Users", key: `/users`, icon: <UsergroupAddOutlined /> },
     { label: "Perfil", key: `/profile/${_id}`, icon: <UserOutlined /> },
   ] 
 
   const DOCENTE_ITEMS = [
     { label: "Inicio", key: "/home", icon: <HomeOutlined /> },    
-    { label: "Discounts", key: "/discounts", icon: <SmileOutlined /> },
-    { label: "Orders", key: `/orders`, icon: <OrderedListOutlined /> },
     { label: "Perfil", key: `/profile/${_id}`, icon: <UserOutlined /> },
   ] 
 

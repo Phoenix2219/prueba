@@ -1,19 +1,38 @@
-import jwt from "jsonwebtoken"
-import User from "../admin-api/models/user.model.js"
+import jwt from "jsonwebtoken";
+import User from "../admin-api/models/user.model.js";
 
-export const verifyToken = (roles) => async (req, res, next) => {  
-  const token = req.cookies.access_token
-  if (!token) return res.status(401).json({ message: "Token not found!" })
-
+export const verifyToken = (roles = []) => async (req, res, next) => {
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY)
-    const user = await User.findById(decoded.id)
-    if (!roles.includes(user.role)) {
-      return res.status(403).json({ message: "You need to be a admin to perform this action.." })
+    // 👇 Obtenemos el header "Authorization: Bearer <token>"
+    const authHeader = req.headers["authorization"];
+    if (!authHeader) {
+      return res.status(401).json({ message: "Token not found!" });
     }
-    req.user = user
-    next()
+
+    const token = authHeader.split(" ")[1]; // "Bearer token"
+    if (!token) {
+      return res.status(401).json({ message: "Token not found!" });
+    }
+
+    // 👇 Verificamos el token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
+    // 👇 Obtenemos el usuario de la DB
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // 👇 Validamos roles si se pasó un array (ej: ["admin"])
+    if (roles.length > 0 && !roles.includes(user.role)) {
+      return res.status(403).json({
+        message: "You don't have permission to perform this action",
+      });
+    }
+
+    req.user = user; // Guardamos el usuario en req
+    next();
   } catch (error) {
-    res.status(401).json({ message: "Unauthorized" })
+    return res.status(401).json({ message: "Unauthorized" });
   }
-}
+};
