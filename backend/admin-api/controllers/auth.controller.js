@@ -75,7 +75,7 @@ export const signin = async (req, res, next) => {
 
     const { password: pass, ...rest } = validUser._doc;
 
-    // 👇 Devolvemos el token directamente en JSON
+    // Devolvemos el token directamente en JSON
     res.status(200).json({
       ...rest,
       token,

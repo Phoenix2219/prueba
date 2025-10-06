@@ -4,6 +4,7 @@ import {
   UserOutlined,
   UsergroupAddOutlined,
   HomeOutlined,
+  FileSearchOutlined,
 } from "@ant-design/icons"
 
 interface UserProps {
@@ -23,7 +24,7 @@ export const getNavItems = (user: UserProps) => {
   ] 
 
   const DOCENTE_ITEMS = [
-    { label: "Inicio", key: "/home", icon: <HomeOutlined /> },    
+    { label: "Revisar", key: "/revise", icon: <FileSearchOutlined /> },    
     { label: "Perfil", key: `/profile/${_id}`, icon: <UserOutlined /> },
   ] 
 

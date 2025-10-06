@@ -10,6 +10,8 @@ const DocumentSchema = new mongoose.Schema({
   supabasePath: String,
   url: String,
   uploadedAt: { type: Date, default: Date.now },
+  isReviewed: { type: Boolean, default: false },
+  reviewedAt: { type: Date },
 });
 
 export default mongoose.model("Document", DocumentSchema);

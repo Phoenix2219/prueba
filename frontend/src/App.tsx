@@ -11,6 +11,7 @@ import DashboardPage from "./pages/dashboard"
 import NotFoundComponent from "./components/ui/NotFound"
 import Users from "./pages/users"
 import Files from "./pages/files"
+import Revise from "./pages/revise"
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<Homes />} />
+          <Route path="/revise" element={<Revise />} />
           <Route path="/file" element={<Files />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/users" element={<Users />} />

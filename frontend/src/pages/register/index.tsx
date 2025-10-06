@@ -9,7 +9,7 @@ const Register = () => {
   const [form] = Form.useForm()
   const [signup, { isLoading }] = useSignupMutation()
   const navigate = useNavigate()
-  const [password, setPassword] = useState("")
+  const password = Form.useWatch("password", form) || "";
   const [showTooltip, setShowTooltip] = useState(false)
 
   const onFinish = async (values: {
@@ -114,14 +114,14 @@ const Register = () => {
               {
                 validator: (_, value) => {
                   const regex =
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.,;:]).{8,}$/
-                  if (!value) return Promise.resolve()
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.,;:]).{8,}$/;
+                  if (!value) return Promise.resolve();
                   if (!regex.test(value)) {
                     return Promise.reject(
                       "La contraseña no cumple con los requisitos."
-                    )
+                    );
                   }
-                  return Promise.resolve()
+                  return Promise.resolve();
                 },
               },
             ]}
@@ -136,7 +136,10 @@ const Register = () => {
               <Input.Password
                 placeholder="••••••••"
                 className="w-full"
-                onChange={(e) => setPassword(e.target.value)}
+                value={password} // 👈 se conecta al estado
+                onChange={(e) => {
+                  form.setFieldsValue({ password: e.target.value }); // 👈 sincroniza el form
+                }}
                 onFocus={() => setShowTooltip(true)}
                 onBlur={() => setShowTooltip(false)}
               />

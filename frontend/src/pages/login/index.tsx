@@ -14,10 +14,37 @@ const Login = () => {
   const onFinish = async (values: { email: string; password: string }) => {
     try {
       const user = await signin(values).unwrap();
+
+      // Guardar en localStorage
+      localStorage.setItem("token", user.token);
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          _id: user._id,
+          username: user.username,
+          email: user.email,
+          role: user.role,
+        })
+      );
+
+      // Actualizar Redux (si quieres mantener el estado sincronizado)
       dispatch(setUser({ user: user, accessToken: user.token }));
+
       message.success("Login exitoso");
       form.resetFields();
-      navigate("/home");
+
+      // Redirigir según el rol
+      switch (user.role) {
+        case "administrador":
+          navigate("/file");
+          break;
+        case "docente":
+          navigate("/revise");
+          break;
+        default:
+          navigate("/home");
+          break;
+      }
     } catch (error) {
       message.error("Credenciales inválidas");
     }

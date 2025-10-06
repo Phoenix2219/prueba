@@ -1,8 +1,6 @@
 import Document from "../models/document.model.js";
-import User from "../models/user.model.js";
 import { supabase } from "../../supabaseClient.js";
 import { v4 as uuidv4 } from "uuid";
-import axios from "axios";
 
 const BUCKET_NAME = "Acceso";
 
@@ -50,10 +48,10 @@ export const uploadDocument = async (req, res) => {
     await newDoc.save();
 
     // AVISAR A N8N (Deshabilitado por ahora)
-    await axios.post("https://dd751ddbcae5.ngrok-free.app/webhook/ce2958e7-9a9e-4159-8a8b-5528a2e5a766", {
+    /*await axios.post("https://dd751ddbcae5.ngrok-free.app/webhook/ce2958e7-9a9e-4159-8a8b-5528a2e5a766", {
       userId,
       url: publicUrlData.publicUrl,
-    });
+    });*/
 
     res.status(201).json(newDoc);
   } catch (err) {

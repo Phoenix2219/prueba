@@ -9,7 +9,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 // Subida de documentos (solo si tiene alguno de esos roles)
 router.post(
   "/upload",
-  verifyToken(["administrador", "docente", "estudiante"]), // ✅ middleware JWT
+  verifyToken(["administrador", "docente", "estudiante"]), // middleware JWT
   upload.single("file"),
   uploadDocument
 );
@@ -17,7 +17,7 @@ router.post(
 // Listar documentos del usuario logueado
 router.get(
   "/lower",
-  verifyToken(["administrador", "docente", "estudiante"]), // ✅ middleware JWT
+  verifyToken(["administrador", "docente", "estudiante"]), // middleware JWT
   getUserDocuments
 );
 

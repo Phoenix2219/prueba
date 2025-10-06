@@ -10,11 +10,10 @@ export const createAdminUser = async () => {
     const existingAdmin = await User.findOne({ email: adminEmail });
 
     if (existingAdmin) {
-      console.log("✅ Admin ya existe.");
       return;
     }
 
-    const hashedPassword = await bcrypt.hash("Admin123!", 10); // 
+    const hashedPassword = await bcrypt.hash("Admin123!", 10);
 
     const adminUser = new User({
       username: "admin",
