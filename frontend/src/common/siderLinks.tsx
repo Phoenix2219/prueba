@@ -19,7 +19,7 @@ export const getNavItems = (user: UserProps) => {
 
   const ADMIN_ITEMS = [
     { label: "Panel", key: "/dashboard", icon: <LaptopOutlined /> },
-    { label: "Users", key: `/users`, icon: <UsergroupAddOutlined /> },
+    { label: "Usuarios", key: `/users`, icon: <UsergroupAddOutlined /> },
     { label: "Perfil", key: `/profile/${_id}`, icon: <UserOutlined /> },
   ] 
 
