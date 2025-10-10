@@ -104,7 +104,7 @@ export const feedbackDocument = async (req, res) => {
     const { id } = req.params;
     const feedbacks = await Feedback.find({ studentId: id })
       .populate("teacherId", "username email")
-      .sort({ fecha: -1 });
+      .sort({ createdAt: -1 });
     res.json(feedbacks);
   } catch (err) {
     console.error(err);

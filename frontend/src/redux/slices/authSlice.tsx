@@ -5,7 +5,7 @@ import { RootState } from "../store"
 export const authSlice = createApi({
   reducerPath: "authSlice",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_API_URL}/api/auth`,
+    baseUrl: `${import.meta.env.VITE_API_URL}/api/auth`,    
     credentials: "include",
     prepareHeaders: (headers, { getState }) => {
       const state = getState() as RootState

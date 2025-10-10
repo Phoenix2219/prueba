@@ -1,6 +1,8 @@
 import Document from "../models/document.model.js";
+import User from "../models/user.model.js";
 import { supabase } from "../../supabaseClient.js";
 import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
 
 const BUCKET_NAME = "Acceso";
 
@@ -47,11 +49,44 @@ export const uploadDocument = async (req, res) => {
 
     await newDoc.save();
 
-    // AVISAR A N8N (Deshabilitado por ahora)
-    /*await axios.post("https://dd751ddbcae5.ngrok-free.app/webhook/ce2958e7-9a9e-4159-8a8b-5528a2e5a766", {
-      userId,
-      url: publicUrlData.publicUrl,
-    });*/
+    // AVISAR A N8N - Enviar todos los correos de docentes
+    try {
+      // 1. Buscar información del estudiante que subió el documento
+      const estudiante = await User.findById(userId);
+
+      // Buscar solo los emails de todos los docentes
+      const docentes = await User.find(
+        { role: 'docente' }, 
+        { email: 1, _id: 0 } // Solo traer el campo email
+      );
+      
+      // Extraer solo los correos electrónicos
+      const correosDocentes = docentes.map(docente => docente.email);
+      
+      // Enviar al webhook de n8n
+      /*await axios.post("https://resorts-walks-midlands-disks.trycloudflare.com/webhook-test/ce2958e7-9a9e-4159-8a8b-5528a2e5a766", {
+        estudiante: {
+          userId: estudiante._id,
+          username: estudiante.username,
+          email: estudiante.email,
+          username: estudiante.username,
+        },
+        documento: {
+          url: publicUrlData.publicUrl,
+          fileName: file.originalname,
+          uniqueId: uniqueId,
+          uploadDate: new Date().toISOString()
+        },               
+        correosDocentes: correosDocentes,
+        totalDocentes: correosDocentes.length,        
+      });*/
+      
+      //console.log(`N8N notificado correctamente. ${correosDocentes.length} docentes enviados para notificación.`);
+      
+    } catch (n8nError) {
+      console.error("Error al enviar docentes a n8n:", n8nError.message);
+      // No lanzamos el error para no afectar la subida del documento
+    }
 
     res.status(201).json(newDoc);
   } catch (err) {

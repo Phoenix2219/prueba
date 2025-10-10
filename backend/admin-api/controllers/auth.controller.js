@@ -47,7 +47,7 @@ export const signupStudent = async (req, res) => {
       username,
       email,
       password: hashedPassword,
-      role: "estudiante" // 👈 forzado
+      role: "estudiante" // forzado
     });
     await newUser.save();
 

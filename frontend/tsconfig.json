@@ -13,7 +13,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["react", "react-dom"],
+    "types": ["react", "react-dom", "jest", "node", "@testing-library/jest-dom", "msw"],
 
     /* Linting */
     "strict": true,
@@ -21,6 +21,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "../api/supabaseClient.js"],
+  "include": ["src", "../api/supabaseClient.js", "test/__tests__", "test/testUtils"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

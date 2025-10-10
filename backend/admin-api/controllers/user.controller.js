@@ -1,6 +1,7 @@
 import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
 import validatePassword from "../../utils/validatePassword.js";
+import { errorHandler } from "../../utils/error.js";
 
 /* SIN VALIDACION DE CONTRASEÑA
 export const register = async (req, res) => {

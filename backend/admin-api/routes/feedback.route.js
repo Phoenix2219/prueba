@@ -4,14 +4,16 @@ import { createFeedback, feedbackDocument, listStudents, getStudentDocuments} fr
 
 const router = express.Router()
 
+// Ruta pública para pruebas
+router.get("/", (req, res) => { res.status(200).json({ message: "API funcionando correctamente" });});
 //Listar estudiantes
 router.get("/students", verifyToken(["administrador", "docente"]), listStudents);
 //Extraer documentos de un estudiante específico
 router.get("/student/:id/documents", verifyToken(["administrador", "docente"]), getStudentDocuments);
 //Crear retroalimentación
-router.post("/create", verifyToken(["docente"]), createFeedback)
+router.post("/create", createFeedback)
 //Obtener retroalimentación por documento
-router.get("/student/:id/feeback", feedbackDocument)
+router.get("/student/:id", feedbackDocument)
 
 
 export default router

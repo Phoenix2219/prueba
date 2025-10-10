@@ -36,7 +36,7 @@ const Login = () => {
       // Redirigir según el rol
       switch (user.role) {
         case "administrador":
-          navigate("/file");
+          navigate("/dashboard");
           break;
         case "docente":
           navigate("/revise");
