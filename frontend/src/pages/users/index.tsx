@@ -216,6 +216,7 @@ const Users = () => {
         pagination={pagination}
         dataSource={getAllUsers}
         columns={columns}
+        rowKey="_id"
       />
       <ModalComponent
         modalTitle={isChangePassword ? "Cambiar contraseña" : "Actualizar usuario"}
