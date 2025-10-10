@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-
-console.log("🔍 VITE_API_URL (usersSlice):", import.meta.env.VITE_API_URL)
+import { RootState } from "../store"
 
 export const usersSlice = createApi({
   reducerPath: "usersSlice",
@@ -8,11 +7,9 @@ export const usersSlice = createApi({
     baseUrl: `${import.meta.env.VITE_API_URL}/api/user`,
     credentials: "include",
     prepareHeaders: (headers) => {
-      const token = localStorage.getItem("token"); // <- sacamos directamente de localStorage
+      const token = localStorage.getItem("token");
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
-      } else {
-        console.warn("⚠️ Token no disponible en prepareHeaders");
       }
       return headers;
     },
