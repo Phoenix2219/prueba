@@ -7,6 +7,8 @@ import authRouter from "./admin-api/routes/auth.route.js"
 import testRouter from "./admin-api/routes/test.route.js"
 import documentRouter from "./admin-api/routes/document.route.js";
 import feedbackRouter from "./admin-api/routes/feedback.route.js";
+import courseRouter from "./admin-api/routes/course.route.js";
+import enrollmentRouter from "./admin-api/routes/enrollment.route.js";
 import { createAdminUser } from "./admin-api/seed/createAdminUser.js";
 import cookieParser from "cookie-parser"
 import path from "path"
@@ -57,6 +59,8 @@ app.use("/api/auth", authRouter)
 app.use("/api/test", testRouter)
 app.use("/api/document", documentRouter)
 app.use("/api/feedback", feedbackRouter)
+app.use("/api/course", courseRouter)
+app.use("/api/enrollment", enrollmentRouter);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500

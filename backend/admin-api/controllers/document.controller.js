@@ -64,7 +64,7 @@ export const uploadDocument = async (req, res) => {
       const correosDocentes = docentes.map(docente => docente.email);
       
       // Enviar al webhook de n8n
-      await axios.post("https://abc-irc-dinner-extension.trycloudflare.com/webhook/ce2958e7-9a9e-4159-8a8b-5528a2e5a766", {
+      /*await axios.post("https://abc-irc-dinner-extension.trycloudflare.com/webhook/ce2958e7-9a9e-4159-8a8b-5528a2e5a766", {
         estudiante: {
           userId: estudiante._id,
           username: estudiante.username,
@@ -79,13 +79,12 @@ export const uploadDocument = async (req, res) => {
         },               
         correosDocentes: correosDocentes,
         totalDocentes: correosDocentes.length,        
-      });
+      });*/
       
       //console.log(`N8N notificado correctamente. ${correosDocentes.length} docentes enviados para notificación.`);
       
     } catch (n8nError) {
       console.error("Error al enviar docentes a n8n:", n8nError.message);
-      // No lanzamos el error para no afectar la subida del documento
     }
 
     res.status(201).json(newDoc);

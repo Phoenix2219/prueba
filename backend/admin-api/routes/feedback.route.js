@@ -11,7 +11,7 @@ router.get("/students", verifyToken(["administrador", "docente"]), listStudents)
 //Extraer documentos de un estudiante específico
 router.get("/student/:id/documents", verifyToken(["administrador", "docente"]), getStudentDocuments);
 //Crear retroalimentación
-router.post("/create", createFeedback)
+router.post("/create", verifyToken(["docente"]), createFeedback)
 //Obtener retroalimentación por documento
 router.get("/student/:id", feedbackDocument)
 

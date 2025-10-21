@@ -1,5 +1,5 @@
 import express from "express";
-import Feedback from "../models/feedback.js";
+import Feedback from "../models/feedback.model.js";
 import User from "../models/user.model.js";
 import Document from "../models/document.model.js";
 
@@ -62,7 +62,7 @@ export const getStudentDocuments = async (req, res) => {
 
 // Crear retroalimentación
 export const createFeedback = async (req, res) => {
-  try {
+  try {    
     const teacherId = req.user._id;
     const { studentId, documentIds, feedbackText, qualification } = req.body;
 
@@ -93,7 +93,8 @@ export const createFeedback = async (req, res) => {
 
     await feedback.save();
     res.status(201).json({ message: "Retroalimentación guardada", feedback });
-  } catch (error) {
+  } catch (error) {    
+    console.error(error);
     res.status(500).json({ message: "Error al guardar la retroalimentación", error });
   }
 };
