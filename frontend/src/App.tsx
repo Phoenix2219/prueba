@@ -8,6 +8,7 @@ import Profile from "./pages/profile"
 import PrivateRoute from "./utils/PrivateRoute"
 import Homes from "./pages/homes"
 import DashboardPage from "./pages/dashboard"
+import CoursesPage from "./pages/course"
 import NotFoundComponent from "./components/ui/NotFound"
 import Users from "./pages/users"
 import Files from "./pages/files"
@@ -28,6 +29,7 @@ function App() {
           <Route path="/file" element={<Files />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/users" element={<Users />} />
+          <Route path="/courses" element={<CoursesPage />} />
           <Route path="/profile/:id" element={<Profile />} />
         </Route>
       </Route>

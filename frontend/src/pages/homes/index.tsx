@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import UploadPDF from "./upload";
 import EnrollmentModal from "./enrolled";
 
 const Home = () => {
   const [showEnrollmentModal, setShowEnrollmentModal] = useState(false);
-  const [courses, setCourses] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");

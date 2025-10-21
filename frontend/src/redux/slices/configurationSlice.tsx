@@ -3,11 +3,13 @@ import { MODAL_STATE } from "../../common/states";
 
 interface ConfigurationState {
   [MODAL_STATE.UPDATE_USER_MODAL]: boolean;
+  [MODAL_STATE.UPDATE_COURSE_MODAL]: boolean;
   product: null; // Replace `any` with the actual type of your product if you have one
 }
 
 const initialState: ConfigurationState = {
   [MODAL_STATE.UPDATE_USER_MODAL]: false,
+  [MODAL_STATE.UPDATE_COURSE_MODAL]: false,
   product: null,
 };
 
@@ -19,6 +21,10 @@ const slice = createSlice({
       switch (modalState) {
           case MODAL_STATE.UPDATE_USER_MODAL:
           state[MODAL_STATE.UPDATE_USER_MODAL] = !state[MODAL_STATE.UPDATE_USER_MODAL];
+          break;
+          case MODAL_STATE.UPDATE_COURSE_MODAL:
+          state[MODAL_STATE.UPDATE_COURSE_MODAL] =
+            !state[MODAL_STATE.UPDATE_COURSE_MODAL];
           break;     
         default:
           break;

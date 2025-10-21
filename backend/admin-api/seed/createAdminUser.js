@@ -24,6 +24,6 @@ export const createAdminUser = async () => {
 
     await adminUser.save();
   } catch (error) {
-    console.error("❌ Error creando usuario admin:", error.message);
+    console.error("Error creando usuario admin:", error.message);
   }
 };

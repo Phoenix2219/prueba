@@ -1,27 +1,28 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit"
-// import { testSlice } from "./slices/testSlice"
-import { authSlice } from "./slices/authSlice"
-import userReducer from "./slices/userSlice"
-import configurationReducer from "./slices/configurationSlice"
-import storage from "redux-persist/lib/storage"
-import { persistReducer, persistStore } from "redux-persist"
-import { usersSlice } from "./slices/usersSlice"
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { authSlice } from "./slices/authSlice";
+import { usersSlice } from "./slices/usersSlice";
+import { coursesSlice } from "./slices/coursesSlice"; // 👈 Importa tu nuevo slice
+import userReducer from "./slices/userSlice";
+import configurationReducer from "./slices/configurationSlice";
+import storage from "redux-persist/lib/storage";
+import { persistReducer, persistStore } from "redux-persist";
 
 const rootReducer = combineReducers({
   [authSlice.reducerPath]: authSlice.reducer,
   [usersSlice.reducerPath]: usersSlice.reducer,
+  [coursesSlice.reducerPath]: coursesSlice.reducer, // 👈 Agregado aquí
   user: userReducer,
   configuration: configurationReducer,
-})
+});
 
 const persistConfig = {
   key: "root",
   storage,
   version: 1,
   whitelist: ["user", "configuration"],
-}
+};
 
-const persistedReducer = persistReducer(persistConfig, rootReducer)
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
@@ -29,7 +30,11 @@ export const store = configureStore({
     getDefaultMiddleware({ serializableCheck: false })
       .concat(authSlice.middleware)
       .concat(usersSlice.middleware)
-})
+      .concat(coursesSlice.middleware), // 👈 Agregado aquí también
+});
 
-export const persistor = persistStore(store)
+export const persistor = persistStore(store);
+
+// Tipado (si usas TypeScript)
 export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
