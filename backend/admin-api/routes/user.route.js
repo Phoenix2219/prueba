@@ -5,9 +5,9 @@ const router = express.Router()
 
 router.get("/test", test)
 router.put('/update/:id', editUser);
-router.get("/user/:id", getUserDetails)
 router.get("/all", getAllUsers)
-router.get("/stats", getDashboardStats);
+router.get("/details/stats", getDashboardStats);
 router.delete("/delete/:id", deleteUser)
+router.get("/:id", getUserDetails)
 
 export default router;

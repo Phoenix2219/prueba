@@ -25,7 +25,7 @@ export const usersSlice = createApi({
     }),
     getUserDetails: builder.query({
       query: (id) => ({
-        url: `/user/${id}`,
+        url: `/${id}`,
         method: "GET",
       }),
       providesTags: ["User"],

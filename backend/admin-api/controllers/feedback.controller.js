@@ -99,8 +99,8 @@ export const createFeedback = async (req, res) => {
   }
 };
 
-//Obtener retroalimentación por documento
-export const feedbackDocument = async (req, res) => {
+//Obtener retroalimentación por estudiante
+export const feedbackStudent = async (req, res) => {
   try {
     const { id } = req.params;
     const feedbacks = await Feedback.find({ studentId: id })

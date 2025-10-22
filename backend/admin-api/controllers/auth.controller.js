@@ -88,7 +88,7 @@ export const signin = async (req, res, next) => {
 export const signout = async (req, res, next) => {
   try {
     res.clearCookie("access_token")
-    res.status(200).json({ message: "User has been signed out..." })
+    res.status(200).json({ message: "Usuario desconectado" })
   } catch (error) {
     next(error)
   }

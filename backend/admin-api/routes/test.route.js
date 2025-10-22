@@ -7,7 +7,7 @@ router.get("/", (req, res) => { res.status(200).json({ message: "API funcionando
 });
 
 // Acceso para admin o docente
-router.get("/admin",(req, res) => { res.status(200).json({ message: "Hello Admin or Teacher" });
+router.get("/admin",(req, res) => { res.status(200).json({ message: "Hello Admin" });
 });
 
 // Solo docentes

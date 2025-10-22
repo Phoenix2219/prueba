@@ -1,6 +1,6 @@
 import express from "express"
 import { verifyToken } from "../../middlewares/authMiddleware.js";
-import { createFeedback, feedbackDocument, listStudents, getStudentDocuments} from "../controllers/feedback.controller.js"
+import { createFeedback, feedbackStudent, listStudents, getStudentDocuments} from "../controllers/feedback.controller.js"
 
 const router = express.Router()
 
@@ -12,8 +12,8 @@ router.get("/students", verifyToken(["administrador", "docente"]), listStudents)
 router.get("/student/:id/documents", verifyToken(["administrador", "docente"]), getStudentDocuments);
 //Crear retroalimentación
 router.post("/create", verifyToken(["docente"]), createFeedback)
-//Obtener retroalimentación por documento
-router.get("/student/:id", feedbackDocument)
+//Obtener retroalimentación por estudiante
+router.get("/student/:id", feedbackStudent)
 
 
 export default router

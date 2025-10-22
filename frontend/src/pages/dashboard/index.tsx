@@ -50,7 +50,7 @@ const DashboardPage: React.FC = () => {
     const fetchDashboard = async () => {
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/user/stats`,
+          `${import.meta.env.VITE_API_URL}/api/user/details/stats`,
           {
             headers: { Authorization: `Bearer ${token}` }, // aquí va el token
           }

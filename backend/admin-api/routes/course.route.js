@@ -14,6 +14,6 @@ router.get("/active", courseActive);
 router.put("/update/:id", updateCourse);
 
 // Eliminar curso
-router.delete("/delete/:id", deleteCourse);
+router.put("/delete/:id", deleteCourse);
 
 export default router
