@@ -1,5 +1,7 @@
 import Document from "../models/document.model.js";
 import User from "../models/user.model.js";
+import Course from "../models/course.model.js";
+import Enrollment from "../models/enrollment.model.js";
 import { supabase } from "../../supabaseClient.js";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
@@ -10,9 +12,21 @@ export const uploadDocument = async (req, res) => {
   try {
     const userId = req.user.id;
     const file = req.file;
+    const { option } = req.body;
+    let parsedOptions = [];
+
+    try {
+      parsedOptions = JSON.parse(option);
+    } catch (e) {
+      parsedOptions = option.split(",").map(o => o.trim());
+    }
 
     if (!file) {
       return res.status(400).json({ error: "No se envió archivo" });
+    }
+
+    if (!option) {
+      return res.status(400).json({ error: "Debe seleccionar una opción" });
     }
 
     // Generar un ID único
@@ -45,46 +59,55 @@ export const uploadDocument = async (req, res) => {
       supabasePath: data.path,
       url: publicUrlData.publicUrl,
       uploadedAt: new Date(),
+      option: parsedOptions,
     });
 
     await newDoc.save();
 
-    // AVISAR A N8N - Enviar todos los correos de docentes
+    // AVISAR A N8N
     try {
       // 1. Buscar información del estudiante que subió el documento
       const estudiante = await User.findById(userId);
 
-      // Buscar solo los emails de todos los docentes
-      const docentes = await User.find(
-        { role: 'docente' }, 
-        { email: 1, _id: 0 } // Solo traer el campo email
-      );
-      
-      // Extraer solo los correos electrónicos
-      const correosDocentes = docentes.map(docente => docente.email);
-      
-      // Enviar al webhook de n8n
-      /*await axios.post("https://abc-irc-dinner-extension.trycloudflare.com/webhook/ce2958e7-9a9e-4159-8a8b-5528a2e5a766", {
+      // 2. Buscar curso matriculado 
+      const enrollment = await Enrollment.findOne({
+        studentId: userId,
+        state: "matriculado",
+      }).populate({
+        path: "courseId",
+        populate: { path: "teacherId", model: "User" },
+      });
+
+      // 3. Extraer solo los correos electrónicos
+      const correoDocente = enrollment?.courseId?.teacherId?.email;
+
+      // 4. Datos a enviar al webhook
+      const payload = {
         estudiante: {
           userId: estudiante._id,
           username: estudiante.username,
           email: estudiante.email,
-          username: estudiante.username,
         },
         documento: {
           url: publicUrlData.publicUrl,
           fileName: file.originalname,
           uniqueId: uniqueId,
-          uploadDate: new Date().toISOString()
-        },               
-        correosDocentes: correosDocentes,
-        totalDocentes: correosDocentes.length,        
-      });*/
-      
+          uploadDate: new Date().toISOString(),
+          option: parsedOptions,
+        },
+        correoDocente: correoDocente,
+      };
+
+      // Enviar al webhook de n8n
+      /*await axios.post("https://29a4b9d4463a.ngrok-free.app/webhook-test/ce2958e7-9a9e-4159-8a8b-5528a2e5a766", 
+        payload
+      );*/
+
+      //console.log("Datos enviados a N8N:\n", JSON.stringify(payload, null, 2));
       //console.log(`N8N notificado correctamente. ${correosDocentes.length} docentes enviados para notificación.`);
-      
+
     } catch (n8nError) {
-      console.error("Error al enviar docentes a n8n:", n8nError.message);
+      console.error("Error al enviar al n8n:", n8nError.message);
     }
 
     res.status(201).json(newDoc);

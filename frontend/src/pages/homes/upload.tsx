@@ -6,6 +6,18 @@ const UploadPDF: React.FC = () => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
 
+  // Estado de los checkbuttons
+  const [checks, setChecks] = useState({
+    Gramatica: false,
+    Plagio: false,
+    Referencias: false,
+  });
+
+  const handleCheckChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target;
+    setChecks((prev) => ({ ...prev, [name]: checked }));
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile && selectedFile.type === "application/pdf") {
@@ -19,10 +31,19 @@ const UploadPDF: React.FC = () => {
   const handleUpload = async () => {
     if (!file) return;
 
+    // Obtener la opción seleccionada
+    const selectedOptions = (Object.keys(checks) as Array<keyof typeof checks>).filter((key) => checks[key]);
+
+    if (!selectedOptions) {
+      message.warning("Selecciona una opción antes de subir el PDF");
+      return;
+    }
+
     setUploading(true);
     try {
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("option", JSON.stringify(selectedOptions));
 
       // Obtener el token guardado
       const token = localStorage.getItem("token");
@@ -50,8 +71,12 @@ const UploadPDF: React.FC = () => {
       setUploading(false);
       setFile(null);
       setPreviewUrl(null);
+      setChecks({ Gramatica: false, Plagio: false, Referencias: false });
     }
   };
+
+  // Verifica si al menos un checkbox está activo
+  const isAnyCheckSelected = Object.values(checks).some(Boolean);
 
   return (
     <div className="p-6 mx-full bg-white shadow-lg rounded-2xl border border-gray-200 h-screen">
@@ -62,6 +87,9 @@ const UploadPDF: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-[30%_70%] gap-6 h-[calc(100%-4rem)]">
         {/* Columna izquierda: subir archivo */}
         <div className="flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-6 bg-gray-50 hover:bg-gray-100 transition h-full">
+
+
+          {/* --- Carga de archivo PDF --- */}
           <input
             id="file-upload"
             type="file"
@@ -91,10 +119,45 @@ const UploadPDF: React.FC = () => {
             </p>
           </label>
 
+          {/* --- Checkbuttons --- */}
+          <div className="flex flex-col items-start mt-4 space-y-2 w-full">
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="Gramatica"
+                checked={checks.Gramatica}
+                onChange={handleCheckChange}
+                className="accent-blue-600 w-5 h-5"
+              />
+              <span className="text-gray-700">Gramatica/Ortografia</span>
+            </label>
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="Plagio"
+                checked={checks.Plagio}
+                onChange={handleCheckChange}
+                className="accent-blue-600 w-5 h-5"
+              />
+              <span className="text-gray-700">Plagio</span>
+            </label>
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="Referencias"
+                checked={checks.Referencias}
+                onChange={handleCheckChange}
+                className="accent-blue-600 w-5 h-5"
+              />
+              <span className="text-gray-700">Referencias</span>
+            </label>
+          </div>
+
+          {/* --- Botón de subir --- */}
           <button
             onClick={handleUpload}
-            disabled={!file || uploading}
-            className={`mt-6 w-full px-4 py-2 rounded-xl text-white font-semibold shadow-md transition ${uploading
+            disabled={!file || !isAnyCheckSelected || uploading}
+            className={`mt-6 w-full px-4 py-2 rounded-xl text-white font-semibold shadow-md transition ${!file || !isAnyCheckSelected || uploading
               ? "bg-gray-400 cursor-not-allowed"
               : "bg-blue-600 hover:bg-blue-700"
               }`}
@@ -123,5 +186,3 @@ const UploadPDF: React.FC = () => {
 };
 
 export default UploadPDF;
-
-

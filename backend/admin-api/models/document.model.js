@@ -12,6 +12,7 @@ const DocumentSchema = new mongoose.Schema({
   uploadedAt: { type: Date, default: Date.now },
   isReviewed: { type: Boolean, default: false },
   reviewedAt: { type: Date },
+  option: [{ type: String }],
 });
 
 export default mongoose.model("Document", DocumentSchema);
