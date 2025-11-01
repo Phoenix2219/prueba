@@ -162,7 +162,7 @@ const UploadPDF: React.FC = () => {
               : "bg-blue-600 hover:bg-blue-700"
               }`}
           >
-            {uploading ? "Subiendo..." : "Subir PDF"}
+            {uploading ? "Analizando..." : "Analizar PDF"}
           </button>
         </div>
 
