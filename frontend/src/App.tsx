@@ -13,17 +13,17 @@ import NotFoundComponent from "./components/ui/NotFound"
 import Users from "./pages/users"
 import Files from "./pages/files"
 import Revise from "./pages/revise"
+import LandingPage from "./pages/landing/presentacion"
 
 function App() {
   return (
-    <Routes>     
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/register-student" element={<RegisterStudent />} />     
-      <Route path="*" element={<NotFoundComponent pageTitle={"Page"} />} />
+      <Route path="/register-student" element={<RegisterStudent />} />
       <Route element={<PrivateRoute />}>
-      <Route path="/register" element={<Register />} />
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<Navigate to="/home" />} />
+        <Route path="/register" element={<Register />} />
+        <Route element={<MainLayout />}>          
           <Route path="/home" element={<Homes />} />
           <Route path="/revise" element={<Revise />} />
           <Route path="/file" element={<Files />} />
@@ -31,8 +31,10 @@ function App() {
           <Route path="/users" element={<Users />} />
           <Route path="/courses" element={<CoursesPage />} />
           <Route path="/profile/:id" element={<Profile />} />
+          <Route path="/" element={<Navigate to="/home" />} />
         </Route>
       </Route>
+      <Route path="*" element={<NotFoundComponent pageTitle="Página no encontrada" />} />
     </Routes>
   )
 }
