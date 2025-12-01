@@ -99,7 +99,7 @@ export const uploadDocument = async (req, res) => {
       };
 
       // Enviar al webhook de n8n
-      await axios.post("https://9d6af70b3723.ngrok-free.app/webhook-test/ce2958e7-9a9e-4159-8a8b-5528a2e5a766", 
+      await axios.post("https://a6394eafa144.ngrok-free.app/webhook-test/ce2958e7-9a9e-4159-8a8b-5528a2e5a766", 
         payload
       );
 
