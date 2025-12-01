@@ -217,13 +217,13 @@ function Footer() {
               </svg>
             </a>
 
-            <a href="https://www.youtube.com/" target="_blank" rel="noopener" className="
+            <a href="/metricas-green" className="
                 w-10 aspect-square rounded-full flex items-center justify-center
                 text-white transition-all duration-300
-                hover:bg-cyan-400 hover:text-black hover:-translate-y-1"
+                hover:bg-green-500 hover:text-white hover:-translate-y-1"
             >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">                
-                <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.3 3.5 12 3.5 12 3.5s-7.3 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c2.1.6 9.4.6 9.4.6s7.3 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.8 15.3V8.7l6.2 3.3-6.2 3.3z"/>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2c-3.5 0-6.5 2.4-7.7 5.7-.6 1.5-.8 3.2-.6 4.8.4 3.1 2.4 5.7 5.1 7.1 1.4.8 3 .4 4.2-.6 2.4-2 4.6-4.8 5.3-8.1.3-1.4.2-2.8-.2-4.1C17.4 3.9 14.9 2 12 2zm-1.2 12.8c-1.7-1.1-2.7-3.1-2.6-5.1 0-.4.4-.7.8-.7s.7.4.7.8c-.1 1.5.6 2.9 1.8 3.7.3.2.4.7.2 1-.3.4-.7.5-.9.3z"/>
               </svg>
             </a>
           </div>

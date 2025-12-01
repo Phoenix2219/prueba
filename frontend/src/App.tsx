@@ -1,5 +1,5 @@
 import "./App.css"
-import { Route, Routes} from "react-router-dom"
+import { Route, Routes, Navigate } from "react-router-dom"
 import Register from "./pages/register"
 import RegisterStudent from "./pages/registerStudent"
 import Login from "./pages/login"
@@ -17,14 +17,13 @@ import LandingPage from "./pages/landing"
 
 function App() {
   return (
-    <Routes>     
+    <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/register-student" element={<RegisterStudent />} />     
-      <Route path="*" element={<NotFoundComponent pageTitle={"Page"} />} />
+      <Route path="/register-student" element={<RegisterStudent />} />
       <Route element={<PrivateRoute />}>
-      <Route path="/register" element={<Register />} />
-        <Route element={<MainLayout />}>
+        <Route path="/register" element={<Register />} />
+        <Route element={<MainLayout />}>          
           <Route path="/home" element={<Homes />} />
           <Route path="/revise" element={<Revise />} />
           <Route path="/file" element={<Files />} />
@@ -32,8 +31,10 @@ function App() {
           <Route path="/users" element={<Users />} />
           <Route path="/courses" element={<CoursesPage />} />
           <Route path="/profile/:id" element={<Profile />} />
+          <Route path="/" element={<Navigate to="/home" />} />
         </Route>
       </Route>
+      <Route path="*" element={<NotFoundComponent pageTitle="Página no encontrada" />} />
     </Routes>
   )
 }
