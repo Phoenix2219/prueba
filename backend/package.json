@@ -4,8 +4,8 @@
   "main": "server.js",
   "type": "module",  
   "scripts": {
-    "dev": "nodemon api/server.js",
-    "start": "node api/server.js",
+    "dev": "nodemon server.js",
+    "start": "node server.js",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage",
     "test:watch": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --config ./jest.config.mjs --watchAll"
   },
