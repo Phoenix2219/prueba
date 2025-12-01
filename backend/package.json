@@ -2,18 +2,11 @@
   "name": "mern-dashboard",
   "version": "1.0.0",
   "main": "server.js",
-  "type": "module",
-  "jest": {
-    "testEnvironment": "node",
-    "extensionsToTreatAsEsm": [
-      ".js"
-    ],
-    "transform": {}
-  },
+  "type": "module",  
   "scripts": {
     "dev": "nodemon api/server.js",
     "start": "node api/server.js",
-    "test": "cd test && cross-env NODE_OPTIONS=--experimental-vm-modules jest --config ./jest.config.mjs --coverage",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage",
     "test:watch": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --config ./jest.config.mjs --watchAll"
   },
   "keywords": [],

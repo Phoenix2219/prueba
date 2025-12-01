@@ -33,7 +33,7 @@ export const uploadDocument = async (req, res) => {
     const uniqueId = `R${uuidv4()}`;
 
     // Nombre único
-    const fileName = `${userId}/${Date.now()}-${uniqueId}`;
+    const fileName = `${userId}/${Date.now()}-${uniqueId}`; //este fileName lo puedo guardar como otra variable al test o como lo envio al test(cypress)
 
     // Subir a Supabase
     const { data, error } = await supabase.storage
@@ -99,9 +99,9 @@ export const uploadDocument = async (req, res) => {
       };
 
       // Enviar al webhook de n8n
-      /*await axios.post("https://29a4b9d4463a.ngrok-free.app/webhook-test/ce2958e7-9a9e-4159-8a8b-5528a2e5a766", 
+      await axios.post("https://fce0ae38f036.ngrok-free.app/webhook-test/ce2958e7-9a9e-4159-8a8b-5528a2e5a766", 
         payload
-      );*/
+      );
 
       //console.log("Datos enviados a N8N:\n", JSON.stringify(payload, null, 2));
       //console.log(`N8N notificado correctamente. ${correosDocentes.length} docentes enviados para notificación.`);

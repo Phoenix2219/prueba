@@ -60,6 +60,10 @@ export const getEnrollmentsByStudent = async (req, res) => {
       .populate("courseId", "nameCourse dateCourse state")
       .populate("studentId", "username email");
 
+    if (!enrollments || enrollments.length === 0) {
+      return res.status(404).json({ message: "No enrollments found" });
+    }
+
     res.status(200).json(enrollments);
   } catch (error) {
     //console.error("Error al obtener matrículas:", error);

@@ -55,10 +55,12 @@ const DocumentViewer: React.FC = () => {
   const [previewWhich, setPreviewWhich] = useState<"original" | "corrected">(
     "original"
   );
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchDocuments = async () => {
       try {
+        setLoading(true);
         const token = localStorage.getItem("token");
         const res = await fetch(`${import.meta.env.VITE_API_URL}/api/document/lower`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -66,9 +68,14 @@ const DocumentViewer: React.FC = () => {
         if (!res.ok) throw new Error("Error al obtener documentos");
         const data: DocumentType[] = await res.json();
 
+        const sorted = [...data].sort(
+          (a, b) =>
+            new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()
+        );
+
         // Asociar posible correctedUrl verificando su existencia
         const enhanced = await Promise.all(
-          data.map(async (doc) => {
+          sorted.map(async (doc) => {
             const candidate = makeCorrectedUrl(doc.url);
             const exists = await checkExists(candidate);
             return exists ? { ...doc, correctedUrl: candidate } : doc;
@@ -79,6 +86,8 @@ const DocumentViewer: React.FC = () => {
         if (enhanced.length > 0) setSelectedDoc(enhanced[0]);
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -96,8 +105,34 @@ const DocumentViewer: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-[35%_65%] gap-6 h-[calc(100%-4rem)]">
         <div className="border-2 border-dashed rounded-xl bg-gray-50 shadow-inner p-4 overflow-y-auto h-full">
-          {documents.length === 0 ? (
-            <p className="text-gray-500 text-center mt-4">No hay documentos disponibles 📂</p>
+          {loading ? (
+            <div className="flex flex-col items-center justify-center h-full text-gray-500">
+              <svg
+                className="animate-spin h-8 w-8 text-blue-500 mb-3"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
+              </svg>
+              <p>Cargando documentos...</p>
+            </div>
+          ) : documents.length === 0 ? (
+            <p className="text-gray-500 text-center mt-4">
+              No hay documentos disponibles 📂
+            </p>
           ) : (
             <ul className="space-y-3">
               {documents.map((doc) => (

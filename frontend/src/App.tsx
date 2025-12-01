@@ -1,5 +1,5 @@
 import "./App.css"
-import { Route, Routes, Navigate } from "react-router-dom"
+import { Route, Routes} from "react-router-dom"
 import Register from "./pages/register"
 import RegisterStudent from "./pages/registerStudent"
 import Login from "./pages/login"
@@ -13,17 +13,18 @@ import NotFoundComponent from "./components/ui/NotFound"
 import Users from "./pages/users"
 import Files from "./pages/files"
 import Revise from "./pages/revise"
+import LandingPage from "./pages/landing"
 
 function App() {
   return (
     <Routes>     
+      <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register-student" element={<RegisterStudent />} />     
       <Route path="*" element={<NotFoundComponent pageTitle={"Page"} />} />
       <Route element={<PrivateRoute />}>
       <Route path="/register" element={<Register />} />
         <Route element={<MainLayout />}>
-          <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<Homes />} />
           <Route path="/revise" element={<Revise />} />
           <Route path="/file" element={<Files />} />

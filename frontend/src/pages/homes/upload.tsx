@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef  } from "react";
 import { message } from "antd";
 
 const UploadPDF: React.FC = () => {
@@ -12,6 +12,8 @@ const UploadPDF: React.FC = () => {
     Plagio: false,
     Referencias: false,
   });
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleCheckChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
@@ -72,6 +74,9 @@ const UploadPDF: React.FC = () => {
       setFile(null);
       setPreviewUrl(null);
       setChecks({ Gramatica: false, Plagio: false, Referencias: false });
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
     }
   };
 
@@ -91,6 +96,7 @@ const UploadPDF: React.FC = () => {
 
           {/* --- Carga de archivo PDF --- */}
           <input
+            ref={fileInputRef}
             id="file-upload"
             type="file"
             accept="application/pdf"
