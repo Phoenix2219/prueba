@@ -40,6 +40,7 @@ const corsOptions = {
     "http://localhost:8000",
     "https://gentle-tranquility-production-9ad4.up.railway.app",
     "https://prueba-wzxx-c9nnpby35-luis-projects-ee31ef04.vercel.app",
+    "https://pruebafront-4kws.onrender.com",
   ],
   credentials: true,
 }
